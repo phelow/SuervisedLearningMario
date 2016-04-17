@@ -43,6 +43,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.image.VolatileImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -66,11 +69,15 @@ private MarioEnvironment marioEnvironment;
 private LevelRenderer layer;
 private BgRenderer[] bgLayer = new BgRenderer[2];
 
+private BufferedWriter writer = null;
+
 private Mario mario;
 private Level level;
 
 final private static DecimalFormat df = new DecimalFormat("00");
 final private static DecimalFormat df2 = new DecimalFormat("000");
+
+final private static boolean recording = true;
 
 private static String[] LEVEL_TYPES = {"Overground(0)",
         "Underground(1)",
@@ -170,8 +177,190 @@ public void reset()
     this.tm0 = tm;
 }
 
+//----code for tracking level params to be printed
+final int numberOfOutputs = 6;
+final int numberOfInputs = 383;
+final int neuronsPerLevel = 50;
+private Environment environment;
+
+double[] outputs;
+
+/*final*/
+protected byte[][] levelScene;
+/*final */
+protected byte[][] enemies;
+protected byte[][] prevEnemies;
+protected byte[][] mergedObservation;
+
+protected float[] marioFloatPos = null;
+protected float[] marioPrevFloatPos = null;
+protected float[] enemiesFloatPos = null;
+
+protected int[] marioState = null;
+
+protected int marioStatus;
+protected int marioMode;
+protected boolean isMarioOnGround;
+protected boolean isMarioAbleToJump;
+protected boolean isMarioAbleToShoot;
+protected boolean isMarioCarrying;
+protected int getKillsTotal;
+protected int getKillsByFire;
+protected int getKillsByStomp;
+protected int getKillsByShell;
+protected int framesPassed = 0;
+
+private boolean firstFrame = true;
+public float GetMarioSpeed(){
+	return this.marioFloatPos[0] - this.marioPrevFloatPos[0];
+}
+//--- end rules based mario functions
+
+
+public float GetMarioVerticalSpeed(){
+	return this.marioFloatPos[1] - this.marioPrevFloatPos[1];
+}
+public void integrateObservation(Environment environment,int zLevelScene, int zLevelEnemies)
+{
+	
+	if(this.firstFrame == false){
+		marioPrevFloatPos = marioFloatPos;
+	}
+	
+    this.environment = environment;
+    levelScene = environment.getLevelSceneObservationZ(zLevelScene);
+    enemies = environment.getEnemiesObservationZ(zLevelEnemies);
+    mergedObservation = environment.getMergedObservationZZ(1, 0);
+    if(firstFrame == false){
+        for(int i = 0; i < mergedObservation.length; i++){
+        	for(int j = 0; j < mergedObservation.length; j++){
+        		if(prevEnemies[i][j] != 0 && mergedObservation[i][j] == 0){
+        			mergedObservation[i][j] = (byte) (prevEnemies[i][j] + 300);
+        		}
+        	}
+        }
+    }
+
+    this.marioFloatPos = environment.getMarioFloatPos();
+    this.enemiesFloatPos = environment.getEnemiesFloatPos();
+    this.marioState = environment.getMarioState();
+
+    // It also possible to use direct methods from Environment interface.
+    //
+    marioStatus = marioState[0];
+    marioMode = marioState[1];
+    isMarioOnGround = marioState[2] == 1;
+    isMarioAbleToJump = marioState[3] == 1;
+    isMarioAbleToShoot = marioState[4] == 1;
+    isMarioCarrying = marioState[5] == 1;
+    getKillsTotal = marioState[6];
+    getKillsByFire = marioState[7];
+    getKillsByStomp = marioState[8];
+    getKillsByShell = marioState[9];
+    
+    prevEnemies = enemies;
+    
+	double[] inputs = new double[numberOfInputs];
+	for(int i = 0; i <numberOfInputs; i++){
+		inputs[i] = 0;
+	}
+	
+	for(int i = 0; i < mergedObservation.length; i++){
+		for(int j = 0; j < mergedObservation.length; j++){
+			inputs[i * mergedObservation.length + j] = mergedObservation[i][j];
+		}
+	}
+	
+	inputs[361] = marioStatus;
+	inputs[362] = marioMode;
+	inputs[363] =  isMarioOnGround ? 1.0 : 0.0;
+	inputs[364] = isMarioAbleToJump ? 1.0 : 0.0;
+	inputs[365] = isMarioAbleToShoot? 1.0 : 0.0;
+	inputs[366] = isMarioCarrying? 1.0 : 0.0;
+	inputs[367] = this.marioFloatPos[0];
+	inputs[368] = this.marioFloatPos[1];
+	if(firstFrame == false && framesPassed > 2){
+		inputs[369] = outputs[0];
+		inputs[370] = outputs[1];
+		inputs[371] = outputs[2];
+		inputs[372] = outputs[3];
+		inputs[373] = outputs[4];
+		inputs[374] = outputs[5];
+		inputs[375] = GetMarioSpeed();
+		inputs[376] = GetMarioVerticalSpeed();
+		inputs[377] = mario.keys[0]== true ? 0:1;;
+		inputs[378] = mario.keys[1]== true ? 0:1;;
+		inputs[379] = mario.keys[2]== true ? 0:1;;
+		inputs[380] = mario.keys[3]== true ? 0:1;;
+		inputs[381] = mario.keys[4]== true ? 0:1;;
+		inputs[382] = mario.keys[5]== true ? 0:1;;
+	}
+	/*
+	 * 
+    this.marioState = environment.getMarioState();
+    marioStatus = marioState[0];
+    marioMode = marioState[1];
+    isMarioOnGround = marioState[2] == 1;
+    isMarioAbleToJump = marioState[3] == 1;
+    isMarioAbleToShoot = marioState[4] == 1;
+    isMarioCarrying = marioState[5] == 1;
+    
+	 * 
+	 */
+     boolean[] action = new boolean[numberOfOutputs];
+     if(firstFrame == false){
+    	 for (int i = 0; i < action.length; i++)
+    		 outputs[i] = mario.keys[i] == true ? 0:1;
+
+    	 try{
+    		 File newFile = new File("E:\\Development\\SchoolWork Spring 2016\\Learning and Advanced Game AI\\SupervisedLearningForMario\\cs229mario\\Data\\trainingData.txt");
+	    	 writer = new BufferedWriter(new FileWriter(newFile,true));
+	    	 
+	    	 for(int i = 0; i <numberOfInputs; i++){
+	    		writer.write(""+inputs[i]); 
+	    		if(i != numberOfInputs - 1){
+	    			writer.write(",");
+	    		}
+	    	}
+	    	 writer.write("\r\n");
+	    	 writer.close();
+    	 }
+    	 catch(Exception e){
+    		 assert(false);
+    	 }
+     }else{
+    	 try{
+
+	    	 File newFile = new File("E:\\Development\\SchoolWork Spring 2016\\Learning and Advanced Game AI\\SupervisedLearningForMario\\cs229mario\\Data\\trainingData.txt");
+	    	 writer = new BufferedWriter(new FileWriter(newFile));
+	    	 writer.write("@relation trainingData\n");
+	    	 for(int i = 0; i <numberOfInputs; i++){
+	    		writer.write("@attribute " + i + " numeric\r\n"); 
+	    	 }
+	    		writer.write("@data\r\n"); 
+	    	 writer.close();
+    	 }
+    	 catch(Exception e){
+    		 assert(false);
+    	 }
+     }
+     framesPassed++;
+		firstFrame = false;
+    //TODO: Write all of inputs to an arf file
+		
+		
+	System.out.println("Recording");
+}
+
+//--end my code
+
 public void tick()
 {
+	if(recording){
+		integrateObservation(marioEnvironment,1,0);
+	}
+	
+	
 //    this.render(thisVolatileImageGraphics, CheaterKeyboardAgent.isObserveLevel ? level.length : 0);
     this.render(thisVolatileImageGraphics);
 
@@ -377,6 +566,7 @@ private static GraphicsConfiguration graphicsConfiguration;
 
 public void init()
 {
+	outputs = new double[6];
     graphicsConfiguration = getGraphicsConfiguration();
 //        System.out.println("!!HRUYA: graphicsConfiguration = " + graphicsConfiguration);
     Art.init(graphicsConfiguration);

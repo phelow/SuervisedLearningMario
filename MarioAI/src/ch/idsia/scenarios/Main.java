@@ -27,6 +27,11 @@
 
 package ch.idsia.scenarios;
 
+import ch.idsia.agents.Agent;
+import ch.idsia.agents.learning.SupervisedLearningAgent;
+import ch.idsia.agents.learning.WekaRecordingAgent;
+import ch.idsia.agents.controllers.ForwardAgent;
+import ch.idsia.benchmark.mario.environments.Environment;
 import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.MarioAIOptions;
 
@@ -36,28 +41,35 @@ import ch.idsia.tools.MarioAIOptions;
  */
 public final class Main
 {
+	public static boolean recordingMode = true;
 public static void main(String[] args)
 {
 //        final String argsString = "-vis on";
     final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 //        final Environment environment = new MarioEnvironment();
-//        final Agent agent = new ForwardAgent();
+        final Agent agent = new SupervisedLearningAgent();
 //        final Agent agent = marioAIOptions.getAgent();
 //        final Agent a = AgentsPool.loadAgent("ch.idsia.controllers.agents.controllers.ForwardJumpingAgent");
     final BasicTask basicTask = new BasicTask(marioAIOptions);
-//        for (int i = 0; i < 10; ++i)
-//        {
-//            int seed = 0;
-//            do
-//            {
-//                marioAIOptions.setLevelDifficulty(i);
-//                marioAIOptions.setLevelRandSeed(seed++);
+        for (int i = 0; i < 10; ++i)
+        {
+            int seed = 0;
+            do
+            {
+            	if(recordingMode){
+            		
+            	}
+            	else{
+            		marioAIOptions.setAgent(agent);
+            	}
+                marioAIOptions.setLevelDifficulty(i);
+                marioAIOptions.setLevelRandSeed(seed++);
     basicTask.setOptionsAndReset(marioAIOptions);
-//    basicTask.runSingleEpisode(1);
+    basicTask.runSingleEpisode(1);
     basicTask.doEpisodes(1,true,1);
-//    System.out.println(basicTask.getEnvironment().getEvaluationInfoAsString());
-//            } while (basicTask.getEnvironment().getEvaluationInfo().marioStatus != Environment.MARIO_STATUS_WIN);
-//        }
+    System.out.println(basicTask.getEnvironment().getEvaluationInfoAsString());
+            } while (basicTask.getEnvironment().getEvaluationInfo().marioStatus != Environment.MARIO_STATUS_WIN);
+        }
 //
     System.exit(0);
 }
