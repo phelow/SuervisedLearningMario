@@ -33,6 +33,16 @@ import ch.idsia.benchmark.mario.environments.Environment;
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.evolution.Evolvable;
 import ch.idsia.evolution.MLP;
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.idsia.agents.LearningAgent;
+import ch.idsia.benchmark.tasks.LearningTask;
+import ch.idsia.tools.EvaluationInfo;
+import ch.idsia.tools.MarioAIOptions;
+import edu.stanford.cs229.agents.ActionQtable;
+import edu.stanford.cs229.agents.MarioAction;
+import edu.stanford.cs229.agents.MarioState;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -64,10 +74,13 @@ public class SupervisedLearningAgent extends BasicMarioAIAgent implements Agent
 {
 int trueJumpCounter = 0;
 int trueSpeedCounter = 0;
+private MarioState currentState;
 String c_marioPerfectRunsDataPath = "";
 public SupervisedLearningAgent()
 {
     super("SupervisedLearningAgent");
+    currentState = new MarioState();
+    
     SetUpWekaInterface();
     reset();
 }
@@ -99,6 +112,12 @@ private boolean DangerOfAny()
             return true;
         else
             return false;
+}
+
+
+public void integrateObservation(Environment environment) {
+  // Update the current state.
+  currentState.update(environment);
 }
 
 public boolean[] getAction()

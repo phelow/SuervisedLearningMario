@@ -38,6 +38,7 @@ import ch.idsia.benchmark.mario.environments.MarioEnvironment;
 import ch.idsia.tools.GameViewer;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.tools.Scale2x;
+import edu.stanford.cs229.agents.MarioState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -208,6 +209,7 @@ protected int getKillsTotal;
 protected int getKillsByFire;
 protected int getKillsByStomp;
 protected int getKillsByShell;
+private MarioState currentState;
 protected int framesPassed = 0;
 
 private boolean firstFrame = true;
@@ -222,7 +224,8 @@ public float GetMarioVerticalSpeed(){
 }
 public void integrateObservation(Environment environment,int zLevelScene, int zLevelEnemies)
 {
-	
+	currentState.update(environment);
+	/* old way
 	if(this.firstFrame == false){
 		marioPrevFloatPos = marioFloatPos;
 	}
@@ -295,6 +298,7 @@ public void integrateObservation(Environment environment,int zLevelScene, int zL
 		inputs[381] = mario.keys[4]== true ? 0:1;;
 		inputs[382] = mario.keys[5]== true ? 0:1;;
 	}
+	*/
 	/*
 	 * 
     this.marioState = environment.getMarioState();
@@ -315,11 +319,14 @@ public void integrateObservation(Environment environment,int zLevelScene, int zL
     	 try{
     		 File newFile = new File("E:\\Development\\SchoolWork Spring 2016\\Learning and Advanced Game AI\\SupervisedLearningForMario\\cs229mario\\Data\\trainingData.txt");
 	    	 writer = new BufferedWriter(new FileWriter(newFile,true));
-	    	 
-	    	 for(int i = 0; i <numberOfInputs; i++){
-	    		writer.write(""+inputs[i]); 
-	    		if(i != numberOfInputs - 1){
+	    
+	    	 for(int i = 0; i <currentState.fields.size(); i++){
+	    		System.out.println(i + ":" + currentState.fields.size() );
+	    		writer.write(""+currentState.fields.get(i).getInt()); 
+	    		if(i != currentState.fields.size() -1){
 	    			writer.write(",");
+	    		}else{
+	    			
 	    		}
 	    	}
 	    	 writer.write("\r\n");
@@ -333,8 +340,8 @@ public void integrateObservation(Environment environment,int zLevelScene, int zL
 
 	    	 File newFile = new File("E:\\Development\\SchoolWork Spring 2016\\Learning and Advanced Game AI\\SupervisedLearningForMario\\cs229mario\\Data\\trainingData.txt");
 	    	 writer = new BufferedWriter(new FileWriter(newFile));
-	    	 writer.write("@relation trainingData\n");
-	    	 for(int i = 0; i <numberOfInputs; i++){
+	    	 writer.write("@relation trainingData\r\n");
+	    	 for(int i = 0; i <currentState.fields.size();i++){
 	    		writer.write("@attribute " + i + " numeric\r\n"); 
 	    	 }
 	    		writer.write("@data\r\n"); 
@@ -566,6 +573,8 @@ private static GraphicsConfiguration graphicsConfiguration;
 
 public void init()
 {
+
+    currentState = new MarioState();
 	outputs = new double[6];
     graphicsConfiguration = getGraphicsConfiguration();
 //        System.out.println("!!HRUYA: graphicsConfiguration = " + graphicsConfiguration);
