@@ -249,8 +249,9 @@ public final class Main
 	
 	public static void main(String[] args) throws Exception
 	{
-		BogoTestCase();
 		/*
+		BogoTestCase();
+		*/
 	//   00     final String argsString = "-vis on";
 	    final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 	//        final Environment environment = new MarioEnvironment();
@@ -295,7 +296,7 @@ public final class Main
 	            } while (basicTask.getEnvironment().getEvaluationInfo().marioStatus != Environment.MARIO_STATUS_WIN);
 	        }
 	//
-	    System.exit(0);*/
+	    System.exit(0);
 	}
 
 }

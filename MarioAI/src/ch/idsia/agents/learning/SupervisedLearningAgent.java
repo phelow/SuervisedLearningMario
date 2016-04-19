@@ -181,6 +181,17 @@ protected int getKillsByShell;
 protected int framesPassed = 0;
 private boolean firstFrame = true;
 
+public String GenerateAllLabels(int i, String s){
+	if(i == 6){
+		return s + ",";
+	}
+	else{
+		i++;
+		String s1 = "true"+s;
+		String s2 = "false"+s;
+		return GenerateAllLabels(i,s1) + GenerateAllLabels(i,s2);
+	}
+}
 
 public void integrateObservation(Environment environment) {
   // Update the current state.
@@ -238,31 +249,63 @@ public void integrateObservation(Environment environment) {
 	  //TODO: fix
 	  //TODO: label is not added, not sure if it needs to be
 	  FastVector fvWekaAttributes = new FastVector(currentState.fields.size()+1);
+	  
 	  Instance iExample = new SparseInstance(currentState.fields.size());
+	  //Add all the numeric attributes
 	  for(int i = 0; i <currentState.fields.size(); i++){
 		  Attribute a = new Attribute("i" + currentState.fields.get(i).name);
 		  fvWekaAttributes.addElement( a);
 	  }
-	  System.out.println("currentState.fields.size():" + currentState.fields.size());
-	  System.out.println("fvWekaAttributes.size():" + fvWekaAttributes.size());
-	  System.out.println("fvWekaAttributes.elementAt(i):" + fvWekaAttributes.elementAt(0).toString());
-	  System.out.println("currentState.fields.get(i).getInt():" + currentState.fields.get(0).getInt());
-	  System.out.println(iExample.toString());
+
+	  FastVector fvClassVal = new FastVector(36);
+	  String nLabels = GenerateAllLabels(0,"");
+
+	  String[] tokens = nLabels.split(",", -1);
+	  for(int i = 0; i < 64; i++){
+		  System.out.println(tokens[i]);
+		  fvClassVal.addElement(tokens[i]);
+	  }
+	  
+		 
+	  Attribute ClassAttribute = new Attribute("MovementLabel",fvClassVal);
+	  
+	  fvWekaAttributes.addElement(ClassAttribute);
+	  
 	  for(int i = 0; i <currentState.fields.size(); i++){
 		  
 		  iExample.setValue((Attribute)fvWekaAttributes.elementAt(i), currentState.fields.get(i).getInt());
 		  System.out.println(iExample.toString());
 		  
 	  }
+	  iExample.setValue((Attribute)fvWekaAttributes.elementAt(currentState.fields.size()),"falsefalsefalsefalsefalsefalse");
+	  //TODO: I think we need to set all this up before we run the thing
+	  System.out.println("currentState.fields.size():" + currentState.fields.size());
+	  System.out.println("fvWekaAttributes.size():" + fvWekaAttributes.size());
+	  System.out.println("fvWekaAttributes.elementAt(i):" + fvWekaAttributes.elementAt(0).toString());
+	  System.out.println("currentState.fields.get(i).getInt():" + currentState.fields.get(0).getInt());
+	  System.out.println(iExample.toString());
 	  
-	  //isTrainingSet.add(iExample);
-	  Instance iUse = new Instance(13);
+	  
+	  isTrainingSet.add(iExample);
+
+	  Classifier cModel = (Classifier)new NaiveBayes();
+	  try{
+		  cModel.buildClassifier(isTrainingSet);
+	  
+	  }
+	  catch(Exception e){
+		  
+		  
+	  }
+	  
+	  
+	  
 	  iExample.setDataset(isTrainingSet);
 	  System.out.println("Printing probability");
 	  try{
-		  double[] fDistribution = m_classifier.distributionForInstance(iUse);
+		  double[] fDistribution = m_classifier.distributionForInstance(iExample);
 		  
-		  for(int i =0; i< 36; i++){
+		  for(int i =0; i< 64; i++){
 			  System.out.println(i + ":" + fDistribution[i]);
 		  }
 	  } catch (Exception e){
