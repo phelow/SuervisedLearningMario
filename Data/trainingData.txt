@@ -1,0 +1,76 @@
+@relation trainingData
+@attribute im numeric
+@attribute iDir numeric
+@attribute i!! numeric
+@attribute ig numeric
+@attribute ij numeric
+@attribute iC numeric
+@attribute iks numeric
+@attribute ikf numeric
+@attribute io numeric
+@attribute ie0 numeric
+@attribute ie1 numeric
+@attribute ie2 numeric
+@attribute label {truetruetruetruetruetrue,falsetruetruetruetruetrue,truefalsetruetruetruetrue,falsefalsetruetruetruetrue,truetruefalsetruetruetrue,falsetruefalsetruetruetrue,truefalsefalsetruetruetrue,falsefalsefalsetruetruetrue,truetruetruefalsetruetrue,falsetruetruefalsetruetrue,truefalsetruefalsetruetrue,falsefalsetruefalsetruetrue,truetruefalsefalsetruetrue,falsetruefalsefalsetruetrue,truefalsefalsefalsetruetrue,falsefalsefalsefalsetruetrue,truetruetruetruefalsetrue,falsetruetruetruefalsetrue,truefalsetruetruefalsetrue,falsefalsetruetruefalsetrue,truetruefalsetruefalsetrue,falsetruefalsetruefalsetrue,truefalsefalsetruefalsetrue,falsefalsefalsetruefalsetrue,truetruetruefalsefalsetrue,falsetruetruefalsefalsetrue,truefalsetruefalsefalsetrue,falsefalsetruefalsefalsetrue,truetruefalsefalsefalsetrue,falsetruefalsefalsefalsetrue,truefalsefalsefalsefalsetrue,falsefalsefalsefalsefalsetrue,truetruetruetruetruefalse,falsetruetruetruetruefalse,truefalsetruetruetruefalse,falsefalsetruetruetruefalse,truetruefalsetruetruefalse,falsetruefalsetruetruefalse,truefalsefalsetruetruefalse,falsefalsefalsetruetruefalse,truetruetruefalsetruefalse,falsetruetruefalsetruefalse,truefalsetruefalsetruefalse,falsefalsetruefalsetruefalse,truetruefalsefalsetruefalse,falsetruefalsefalsetruefalse,truefalsefalsefalsetruefalse,falsefalsefalsefalsetruefalse,truetruetruetruefalsefalse,falsetruetruetruefalsefalse,truefalsetruetruefalsefalse,falsefalsetruetruefalsefalse,truetruefalsetruefalsefalse,falsetruefalsetruefalsefalse,truefalsefalsetruefalsefalse,falsefalsefalsetruefalsefalse,truetruetruefalsefalsefalse,falsetruetruefalsefalsefalse,truefalsetruefalsefalsefalse,falsefalsetruefalsefalsefalse,truetruefalsefalsefalsefalse,falsetruefalsefalsefalsefalse,truefalsefalsefalsefalsefalse,falsefalsefalsefalsefalsefalse,}
+@data
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,0,8,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,4,0,0,64,falsetruefalsefalsetruefalse
+2,4,0,1,0,0,0,0,4,0,0,64,falsetruefalsefalsetruefalse
+2,1,0,1,1,0,0,0,4,0,64,0,falsetruefalsefalsetruefalse
+2,1,0,1,1,0,0,1,4,0,0,0,falsetruefalsefalsetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,0,0,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,4,0,1,0,0,0,0,0,0,0,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,0,0,0,falsetruefalsetruetruefalse
+2,4,0,1,0,0,0,0,4,0,0,4,falsetruefalsetruetruefalse
+2,1,0,1,1,0,0,0,4,0,0,4,falsetruefalsefalsetruefalse
+2,5,0,0,1,0,0,0,4,0,0,4,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,4,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,64,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,8,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,8,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,128,0,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,1,0,falsetruefalsetruetruefalse
+2,5,0,0,1,0,0,0,0,0,1,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,1,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,1,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,0,0,9,falsetruefalsetruetruefalse
+2,4,0,1,0,0,0,0,4,0,0,1,falsetruefalsetruetruefalse
+2,1,0,1,0,0,0,0,4,0,0,9,falsetruefalsetruetruefalse
+2,1,0,1,0,0,0,0,0,0,0,8,falsetruefalsetruetruefalse
+2,1,0,1,0,0,0,0,0,0,0,8,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,0,8,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,0,0,8,0,falsetruefalsefalsetruefalse
+2,4,0,1,0,0,0,0,0,0,8,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,8,0,falsetruefalsefalsetruefalse
+2,4,0,0,1,0,0,0,0,0,128,0,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,128,0,0,falsetruefalsetruetruefalse
+2,4,0,1,0,0,0,0,4,1,0,0,falsetruefalsetruetruefalse
+2,1,0,1,0,0,0,0,4,0,1,4,falsetruefalsetruetruefalse
+2,1,0,1,0,0,0,0,0,0,1,64,falsetruefalsetruetruefalse
+2,1,0,1,0,0,0,0,0,0,1,64,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,0,4,16,falsetruefalsetruetruefalse
+2,4,0,0,1,0,0,0,4,0,4,0,falsetruefalsetruetruefalse

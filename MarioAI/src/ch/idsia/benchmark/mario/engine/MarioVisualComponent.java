@@ -323,12 +323,16 @@ public void integrateObservation(Environment environment,int zLevelScene, int zL
 	    	 for(int i = 0; i <currentState.fields.size(); i++){
 	    		System.out.println(i + ":" + currentState.fields.size() );
 	    		writer.write(""+currentState.fields.get(i).getInt()); 
-	    		if(i != currentState.fields.size() -1){
 	    			writer.write(",");
-	    		}else{
-	    			
-	    		}
 	    	}
+	    	writer.write(GenerateLabel(mario.keys[0],mario.keys[1],mario.keys[2],mario.keys[3],mario.keys[4],mario.keys[5])); 
+	    	/* for(int i = 0; i <6;i++){
+		    		writer.write(""+ mario.keys[i]); 
+
+		    		if(i != 5){
+		    			writer.write(",");
+		    		}
+	    	 }*/
 	    	 writer.write("\r\n");
 	    	 writer.close();
     	 }
@@ -342,10 +346,19 @@ public void integrateObservation(Environment environment,int zLevelScene, int zL
 	    	 writer = new BufferedWriter(new FileWriter(newFile));
 	    	 writer.write("@relation trainingData\r\n");
 	    	 for(int i = 0; i <currentState.fields.size();i++){
-	    		writer.write("@attribute " + i + " numeric\r\n"); 
+	    		writer.write("@attribute i" + currentState.fields.get(i).name + " numeric\r\n"); 
 	    	 }
-	    		writer.write("@data\r\n"); 
-	    	 writer.close();
+	    	 writer.write("@attribute label {");
+	    	 String allLabels = GenerateAllLabels(0,"");
+	    	 allLabels.substring(0, allLabels.length()-2);
+	    	 writer.write(allLabels);
+			 
+			 
+			 
+	    	writer.write("}\r\n");
+	    	 
+	    	writer.write("@data\r\n"); 
+	    	writer.close();
     	 }
     	 catch(Exception e){
     		 assert(false);
@@ -357,6 +370,21 @@ public void integrateObservation(Environment environment,int zLevelScene, int zL
 		
 		
 	System.out.println("Recording");
+}
+
+public String GenerateAllLabels(int i, String s){
+	if(i == 6){
+		return s + ",";
+	}
+	else{
+		i++;
+		String s1 = "true"+s;
+		String s2 = "false"+s;
+		return GenerateAllLabels(i,s1) + GenerateAllLabels(i,s2);
+	}
+}
+public String GenerateLabel(boolean one, boolean two, boolean three, boolean four, boolean five, boolean six){
+	return one + "" + two + "" + three + "" + four + "" + five + "" + six;
 }
 
 //--end my code

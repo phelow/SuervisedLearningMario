@@ -72,8 +72,8 @@ protected int marioEgoCol;
 // values of these variables could be changed during the Agent-Environment interaction.
 // Use them to get more detailed or less detailed description of the level.
 // for information see documentation for the benchmark <link: marioai.org/marioaibenchmark/zLevels
-int zLevelScene = 1;
-int zLevelEnemies = 0;
+protected int zLevelScene = 1;
+protected int zLevelEnemies = 0;
 
 public BasicMarioAIAgent(String s)
 {
@@ -88,6 +88,7 @@ public boolean[] getAction()
 
 public void integrateObservation(Environment environment)
 {
+	System.out.println("integrateObservation");
     levelScene = environment.getLevelSceneObservationZ(zLevelScene);
     enemies = environment.getEnemiesObservationZ(zLevelEnemies);
     mergedObservation = environment.getMergedObservationZZ(1, 0);
@@ -152,7 +153,7 @@ public int getEnemiesCellValue(int x, int y)
 
 public int getReceptiveFieldCellValue(int x, int y)
 {
-    if (x < 0 || x >= levelScene.length || y < 0 || y >= levelScene[0].length)
+    if (levelScene == null || x < 0 || x >= levelScene.length || y < 0 || y >= levelScene[0].length)
         return 0;
 
     return levelScene[x][y];

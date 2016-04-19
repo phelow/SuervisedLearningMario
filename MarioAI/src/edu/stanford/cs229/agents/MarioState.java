@@ -360,7 +360,7 @@ public class MarioState {
   }
   
   public abstract class Field {
-    String name;
+    public String name;
     public Field(String name) {
       this.name = name;
       fields.add(this);
