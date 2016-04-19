@@ -304,10 +304,33 @@ public void integrateObservation(Environment environment) {
 	  System.out.println("Printing probability");
 	  try{
 		  double[] fDistribution = m_classifier.distributionForInstance(iExample);
-		  
+		  int max = 0;
 		  for(int i =0; i< 64; i++){
+			  if(fDistribution[max] < fDistribution[i]){
+				  max = i;
+			  }
+			  
 			  System.out.println(i + ":" + fDistribution[i]);
 		  }
+		  int start = 0;
+		  
+		 for(int  i= 0; i < 6; i++){ 
+			  
+			  //get the moves from the token
+			  if(tokens[max].substring(start, start + 5).equals("false")){
+				  start += 5;
+				  System.out.println(false);
+				  action[i] = false;
+			  }
+			  else if(tokens[max].substring(start,start+ 4).equals("true")){
+				  start += 4;
+				  System.out.println(true);
+				  action[i] = true;
+			  }else{
+				  System.out.println("ERROR");
+			  }
+		 }
+		  
 	  } catch (Exception e){
 		  System.out.println("Could not print likelihoods");
 	  }
@@ -361,34 +384,6 @@ FastVector m_fv;
 public boolean[] getAction()
 {
 	
-	if(firstFrame == false){
-		System.out.println(predictionsToString(m_fv));
-		
-		
-		
-		
-	}
-	//m_randomForest.classifyInstance();
-	// this Agent requires observation integrated in advance.
-    if (DangerOfAny() && getReceptiveFieldCellValue(marioEgoRow, marioEgoCol + 1) != 1)  // a coin
-    {
-        if (isMarioAbleToJump || (!isMarioOnGround && action[Mario.KEY_JUMP]))
-        {
-            action[Mario.KEY_JUMP] = true;
-        }
-        ++trueJumpCounter;
-    }
-    else
-    {
-        action[Mario.KEY_JUMP] = false;
-        trueJumpCounter = 0;
-    }
-
-    if (trueJumpCounter > 16)
-    {
-        trueJumpCounter = 0;
-        action[Mario.KEY_JUMP] = false;
-    }
     
     return action;
 }
